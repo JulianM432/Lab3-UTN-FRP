@@ -16,7 +16,7 @@ public class JFMain extends JFrame {
 	private JTextField tfApellido;
 	private JTextField tfDNI;
 	private JTable table;
-	private String[] nombreColumnas = { "Nombre", "Apellido", "DNI" };
+	private String[] nombreColumnas = { "ID", "Nombre", "Apellido", "DNI" };
 	private int row = -1;
 	private Set<Cliente> setClientes = new HashSet<Cliente>();
 
@@ -45,7 +45,7 @@ public class JFMain extends JFrame {
 	 */
 	public JFMain() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 531, 375);
+		setBounds(100, 100, 531, 364);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -88,83 +88,103 @@ public class JFMain extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				row = table.getSelectedRow();
-				if(row != -1) {
-					tfNombre.setText((String)table.getValueAt(row, 0));
-					tfApellido.setText((String) table.getValueAt(row, 1));
-					tfDNI.setText((String)table.getValueAt(row, 2));	
+				if (row != -1) {
+					tfNombre.setText((String) table.getValueAt(row, 1));
+					tfApellido.setText((String) table.getValueAt(row, 2));
+					tfDNI.setText((String) table.getValueAt(row, 3));
 				}
 			}
 		});
 		scrollPane.setViewportView(table);
-		table.setModel(new DefaultTableModel(new Object[][] { { null, null, null }, }, nombreColumnas));
-										
-												JButton btnAdd = new JButton("Agregar");
-												btnAdd.setBounds(10, 292, 71, 23);
-												contentPane.add(btnAdd);
-												
-														JButton btnBaja = new JButton("Baja");
-														btnBaja.setBounds(146, 292, 78, 23);
-														contentPane.add(btnBaja);
-														
-																JButton btnModif = new JButton("Modif");
-																btnModif.setBounds(289, 292, 78, 23);
-																contentPane.add(btnModif);
-																
-																		JButton btnSalir = new JButton("Salir");
-																		btnSalir.setBounds(432, 292, 71, 23);
-																		contentPane.add(btnSalir);
-																		btnSalir.addActionListener(new ActionListener() {
-																			public void actionPerformed(ActionEvent e) {
-																				dispose();
-																			}
-																		});
-																btnModif.addActionListener(new ActionListener() {
-																	public void actionPerformed(ActionEvent e) {
-																		if(row != -1) {
-																			String nombreString = (String)table.getValueAt(row, 0);
-																			String apellidoString = (String)table.getValueAt(row, 1);
-																			String dniString = (String)table.getValueAt(row, 2);
-																			Cliente unCliente = new Cliente(tfNombre.getText(),tfApellido.getText(),Integer.parseInt(tfDNI.getText()));
-																			listaClientes.addAll(setClientes);
-																			listaClientes.sort(null);
-																			Cliente buscarCliente = new Cliente(nombreString, apellidoString, Integer.parseInt(dniString));
-																			int pos = Collections.binarySearch(listaClientes, buscarCliente);
-																			if(pos >= 0) {
-																				listaClientes.set(pos, unCliente);
-																				setClientes.clear();
-																				setClientes.addAll(listaClientes);
-																				ActualizarTabla();
-																				ClearTextFields();
-																			}
-																		}
-																	}
-																});
-														btnBaja.addActionListener(new ActionListener() {
-															public void actionPerformed(ActionEvent e) {
-																if(row != -1) {
-																	Cliente unCliente = new Cliente(tfNombre.getText(), tfApellido.getText(),
-																			Integer.parseInt(tfDNI.getText()));
-																	setClientes.remove(unCliente);
-																	ActualizarTabla();
-																	ClearTextFields();
-																}
-															}
-														});
-												btnAdd.addActionListener(new ActionListener() {
-													public void actionPerformed(ActionEvent e) {
-														try {
-															Cliente unCliente = new Cliente(tfNombre.getText(), tfApellido.getText(),
-																	Integer.parseInt(tfDNI.getText()));
-															ClearTextFields();
-															setClientes.add(unCliente);
-															ActualizarTabla();
+		table.setModel(new DefaultTableModel(new Object[][] { { null, null, null, null }, }, nombreColumnas));
 
-														} catch (Exception e2) {
-															// TODO: handle exception
-															e2.printStackTrace();
-														}
-													}
-												});
+		JButton btnAdd = new JButton("Agregar");
+		btnAdd.setBounds(10, 292, 71, 23);
+		contentPane.add(btnAdd);
+
+		JButton btnBaja = new JButton("Baja");
+		btnBaja.setBounds(146, 292, 78, 23);
+		contentPane.add(btnBaja);
+
+		JButton btnModif = new JButton("Modif");
+		btnModif.setBounds(289, 292, 78, 23);
+		contentPane.add(btnModif);
+
+		JButton btnSalir = new JButton("Salir");
+		btnSalir.setBounds(432, 292, 71, 23);
+		contentPane.add(btnSalir);
+		btnSalir.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+		});
+		btnModif.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					if (row != -1) {
+						Integer claveInteger = Integer.parseInt(table.getValueAt(row, 0).toString());
+//						String nombreString = (String) table.getValueAt(row, 1);
+//						String apellidoString = (String) table.getValueAt(row, 2);
+//						String dniString = (String) table.getValueAt(row, 3);
+						Cliente unCliente = new Cliente(tfNombre.getText(), tfApellido.getText(),
+								Integer.parseInt(tfDNI.getText()));
+						mapClientes.replace(claveInteger, unCliente);
+						ActualizarTabla();
+						ClearTextFields();
+
+//						listaClientes.addAll(setClientes);
+//						listaClientes.sort(null);
+//						Cliente buscarCliente = new Cliente(nombreString, apellidoString, Integer.parseInt(dniString));
+//						int pos = Collections.binarySearch(listaClientes, buscarCliente);
+//						if (pos >= 0) {
+//							listaClientes.set(pos, unCliente);
+//							setClientes.clear();
+//							setClientes.addAll(listaClientes);
+//							ActualizarTabla();
+//							ClearTextFields();
+//						}
+					}
+				} catch (Exception e2) {
+					// TODO: handle exception
+				}
+			}
+		});
+		btnBaja.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					if (row != -1) {
+						Cliente unCliente = new Cliente(tfNombre.getText(), tfApellido.getText(),
+								Integer.parseInt(tfDNI.getText()));
+						setClientes.remove(unCliente);
+						if (mapClientes.remove(Integer.parseInt((String) table.getValueAt(row, 0))) != null) {
+							JOptionPane.showMessageDialog(null, "Cliente eliminado");
+							ActualizarTabla();
+							ClearTextFields();
+						}
+					}
+				} catch (Exception e2) {
+					// TODO: handle exception
+					e2.printStackTrace();
+				}
+			}
+		});
+		btnAdd.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					Cliente unCliente = new Cliente(tfNombre.getText(), tfApellido.getText(),
+							Integer.parseInt(tfDNI.getText()));
+					ClearTextFields();
+					setClientes.add(unCliente);
+					mapClientes.put(Cliente.cantClientes, unCliente);
+					Cliente.cantClientes++;
+					ActualizarTabla();
+
+				} catch (Exception e2) {
+					// TODO: handle exception
+					e2.printStackTrace();
+				}
+			}
+		});
 	}
 
 	private void ClearTextFields() {
@@ -175,9 +195,17 @@ public class JFMain extends JFrame {
 
 	private void ActualizarTabla() {
 		DefaultTableModel unModel = new DefaultTableModel(nombreColumnas, 0);
-		for (Cliente unCliente : setClientes) {
-			unModel.addRow(unCliente.getDataRow());
+//		for (Cliente unCliente : setClientes) {
+//			unModel.addRow(unCliente.getDataRow());
+//		}
+		for (Integer unKey : mapClientes.keySet()) {
+			String[] unArrayObjects = { Integer.toString(unKey), mapClientes.get(unKey).getNombre(),
+					mapClientes.get(unKey).getApellido(), mapClientes.get(unKey).getDni().toString() };
+			unModel.addRow(unArrayObjects);
 		}
+//		for (Cliente cliente : mapClientes.values()) {
+//			unModel.addRow(cliente.getMapData());
+//		}
 		table.setModel(unModel);
 	}
 }

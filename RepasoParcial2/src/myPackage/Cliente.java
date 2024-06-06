@@ -2,10 +2,11 @@ package myPackage;
 
 import java.util.Objects;
 
-public class Cliente implements Comparable<Cliente>{
+public class Cliente implements Comparable<Cliente> {
 	String nombre;
 	String apellido;
 	Integer dni;
+	static int cantClientes = 0;
 
 	public String getNombre() {
 		return nombre;
@@ -21,6 +22,10 @@ public class Cliente implements Comparable<Cliente>{
 
 	public String[] getDataRow() {
 		return new String[] { nombre, apellido, Integer.toString(dni) };
+	}
+
+	public String[] getMapData() {
+		return new String[] { Integer.toString(cantClientes), nombre, apellido, Integer.toString(dni) };
 	}
 
 	public Cliente(String nombre, String apellido, Integer dni) {
